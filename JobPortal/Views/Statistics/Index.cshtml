@@ -1,0 +1,138 @@
+﻿@using System.Globalization
+@using JobPortal.Models
+@model IEnumerable<JobPortal.Models.Statistics>
+
+@{
+    ViewBag.Title = "Home";
+    
+
+    dynamic seeker = Session["user"] as Seeker;
+    dynamic employer = Session["user"] as Employer;
+    
+}
+
+
+@if (employer != null)
+{
+    <h4>Welcome @employer.CompanyName</h4>
+    <hr>
+    @StatisticsInfo()
+
+}
+else if (seeker != null)
+{
+    <h4>Welcome @seeker.Name</h4>
+    <hr>
+    @StatisticsInfo()
+    
+
+}
+else if (seeker == null && employer == null)
+{
+    <h4>welcome to Job Portal Site</h4>
+    <hr>
+    <h5>Create your account to start using our Services</h5>
+    <h6>If you are looking for jobs then click @Html.ActionLink("HERE", "SeekerAccount", "CreateAccount") to create your account </h6>
+    <h6>If you are looking for employees then click @Html.ActionLink("HERE", "EmployerAccount", "CreateAccount") to create your account </h6>
+    <hr>
+    @StatisticsInfo()
+    
+}
+
+
+@helper StatisticsInfo()
+{
+                    dynamic totalLiveJobs = ViewBag.TotalLiveJobs;
+                    dynamic jobInfoList = ViewBag.jobList;
+                    dynamic totalCompanies = ViewBag.totalCompanies;
+                                                 
+    <h4>@Html.ActionLink("Live Jobs (" + (string)@totalLiveJobs.ToString() + ")", "ViewAllPostedJobs", "Job")</h4>
+
+    <h4>@Html.DisplayNameFor(model => model.TotalCompany) : @totalCompanies</h4>
+
+    <hr>
+    <h4>Polular Jobs</h4>
+
+    <table id="myTable" class="display">
+        <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.CompanyName)</th>
+            <th>@Html.DisplayNameFor(model => model.JobTitle)</th>
+            <th>@Html.DisplayNameFor(model => model.EducationalRequirements)</th>
+            <th>@Html.DisplayNameFor(model => model.ExperienceRequirements)</th>
+            <th>@Html.DisplayNameFor(model => model.ApplicationDeadline)</th>
+            <th>@Html.DisplayNameFor(model => model.TotalApply)</th>
+            <th></th>
+        </tr>
+        </thead>
+
+        <tfoot>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.CompanyName)</th>
+            <th>@Html.DisplayNameFor(model => model.JobTitle)</th>
+            <th>@Html.DisplayNameFor(model => model.EducationalRequirements)</th>
+            <th>@Html.DisplayNameFor(model => model.ExperienceRequirements)</th>
+            <th>@Html.DisplayNameFor(model => model.ApplicationDeadline)</th>
+            <th>@Html.DisplayNameFor(model => model.TotalApply)</th>
+            <th></th>
+        </tr>
+        </tfoot>
+
+        <tbody>
+        @foreach (var item in jobInfoList)
+        {
+            <tr>
+                <td>@item.CompanyName</td>
+                <td>@item.JobTitle</td>
+                <td>@item.EducationalRequirements</td>
+                <td>@item.ExperienceRequirements</td>
+                <td>@item.ApplicationDeadline.ToString("dd/M/yyyy", CultureInfo.InvariantCulture)</td>
+                <td>@item.TotalApply</td>
+                <td>
+                    @Html.ActionLink("Details", "JobDetailsView", new { id = item.JobID })
+                </td>
+
+            </tr>
+        }
+
+
+        </tbody>
+    </table>
+}
+
+
+
+<style>
+    th {
+        text-align: center;
+    }
+
+    td {
+        padding-right: 15px;
+    }
+</style>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Styles.Render("~/Content/cssjqryUi")
+
+
+    <script src="~/Scripts/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        $(document)
+            .ready(function () {
+                $('#myTable').DataTable({ responsive: true });
+
+            });
+
+    </script>
+
+
+}
+
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Scripts/jquery-3.1.0.min.js"></script>
+

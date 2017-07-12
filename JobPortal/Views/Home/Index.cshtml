@@ -1,0 +1,36 @@
+﻿@using JobPortal.Models;
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+@{
+    dynamic seeker = Session["user"] as Seeker;
+    dynamic employer = Session["user"] as Employer;
+    
+}
+
+@if (employer != null)
+    {
+        <h4>Welcome @employer.CompanyName</h4>
+        
+
+}
+else if(seeker != null){
+    <h4>Welcome @seeker.Name</h4>
+    
+}
+else if (seeker == null && employer == null)
+{
+    <h4>welcome to Job Portal </h4>
+    <h5>Create your account to start using our Services</h5>
+    <h6>To view all posted job click @Html.ActionLink("HERE", "ViewAllPostedJobs", "Job") </h6>
+    <h6>If you are looking for jobs then click @Html.ActionLink("HERE", "SeekerAccount", "CreateAccount") to create your account </h6>
+    <h6>If you are looking for employees then click @Html.ActionLink("HERE", "EmployerAccount", "CreateAccount") to create your account </h6>
+    
+     
+    
+}
+
+
+
